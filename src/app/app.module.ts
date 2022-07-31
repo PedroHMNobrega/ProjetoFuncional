@@ -7,8 +7,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { RepositoriesComponent } from './repositories/repositories.component';
-import { RepositoriesFiltersComponent } from './repositories-filters/repositories-filters.component';
-import { HeaderComponent } from './header/header.component';
+import { RepositoriesFiltersComponent } from './repositories-filters/repositories-filters.component'
 import { NotFoundComponent } from './not-found/not-found.component';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { PullsComponent } from './pulls/pulls.component';
@@ -18,7 +17,6 @@ import { PullsComponent } from './pulls/pulls.component';
     AppComponent,
     RepositoriesComponent,
     RepositoriesFiltersComponent,
-    HeaderComponent,
     NotFoundComponent,
     UserInfoComponent,
     PullsComponent
