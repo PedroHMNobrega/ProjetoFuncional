@@ -1,0 +1,41 @@
+<app-repositories-filters (filterChangeEvent)="handleFilters($event)"></app-repositories-filters>
+
+<div class="mt-2 mb-2">
+  <span>Total de issues abertas: </span>
+  <strong>{{ totalOpenIssues }}</strong>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Nome</th>
+      <th scope="col">Descrição</th>
+      <th scope="col">Forked?</th>
+      <th scope="col">Nº de estrelas</th>
+      <th scope="col">Nº de watchers</th>
+      <th scope="col">Nº de issues abertas</th>
+      <th scope="col">Ver mais</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let repo of filteredRepos; let i = index">
+      <th scope="row">{{i + 1}}</th>
+      <td>{{repo.name}}</td>
+      <td class="text-truncate" style="max-width: 150px">{{repo.description}}</td>
+      <td>
+        <ng-container *ngIf="repo.fork; then forked else notForked"></ng-container>
+        <ng-template #forked>Sim</ng-template>
+        <ng-template #notForked>Não</ng-template>
+      </td>
+      <td>{{repo.stargazers_count}}</td>
+      <td>{{repo.watchers_count}}</td>
+      <td>{{repo.open_issues}}</td>
+      <td>
+        <a [href]="repo.html_url">
+          <i class="bi bi-box-arrow-up-right"></i>
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>

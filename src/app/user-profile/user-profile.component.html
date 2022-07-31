@@ -1,0 +1,24 @@
+<app-header></app-header>
+<div class="container-lg p-5" *ngIf="user">
+  <div class="d-flex flex-row">
+    <app-user-info [user]="user"></app-user-info>
+    <div class="flex-fill ms-5 w-100">
+      <ul class="nav nav-tabs">
+        <li class="nav-item" *ngFor="let t of tabs">
+          <a class="nav-link" [class.active]="tab === t.name" [routerLink]="['.']" [queryParams]="{ tab: t.name }">{{t.description}}</a>
+        </li>
+      </ul>
+      <div class="tab-content mt-2">
+        <div class="tab-pane fade" [class.active]="tab === 'repos'" [class.show]="tab === 'repos'" tabindex="0">
+          <app-repositories></app-repositories>
+        </div>
+        <div class="tab-pane fade" [class.active]="tab === 'seguidores'" [class.show]="tab === 'seguidores'" tabindex="1">
+          <app-followers></app-followers>
+        </div>
+        <div class="tab-pane fade" [class.active]="tab === 'seguindo'" [class.show]="tab === 'seguindo'" tabindex="2">
+          <app-followers [isGetFollowers]="false"></app-followers>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
