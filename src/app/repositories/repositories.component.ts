@@ -15,11 +15,11 @@ export class RepositoriesComponent implements OnInit {
   constructor(private githubApi: GithubApiService) { }
 
   ngOnInit(): void {
-    this.githubApi.getUserRepos().subscribe(data => {
-      this.repos = data
-      this.filteredRepos = data
-      this.calculateTotalOpenIssues()
-    })
+    // this.githubApi.getUserRepos().subscribe(data => {
+    //   this.repos = data
+    //   this.filteredRepos = data
+    //   this.calculateTotalOpenIssues()
+    // })
   }
 
   forked(repos: Repository[], forked: boolean | string | null) {

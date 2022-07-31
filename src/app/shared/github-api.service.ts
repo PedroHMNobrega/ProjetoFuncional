@@ -10,52 +10,23 @@ import { retry, catchError } from 'rxjs/operators'
 export class GithubApiService {
 
   apiURL = 'https://api.github.com'
+  token = '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'
+  user = 'NVlabs'
+  repo = 'stylegan'
 
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      // add github token
-      authorization: 'token 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'
+      authorization: `token ${this.token}`
     }),
   };
 
   constructor(private http: HttpClient) { }
 
-  getUserRepos(): Observable<Repository> {
-    return this.http.get<Repository>(
-      this.apiURL + '/user/repos?per_page=60',
+  getPullRequests(): Observable<PullRequest[]> {
+    return this.http.get<PullRequest[]>(
+      this.apiURL + `/repos/${this.user}/${this.repo}/pulls?state=all`,
       this.httpOptions
-    ).pipe(retry(1), catchError(this.handleError))
-  }
-
-  getUserFollowers(): Observable<User[]> {
-    return this.http.get<User[]>(
-      this.apiURL + '/user/followers',
-      this.httpOptions
-    ).pipe(retry(1), catchError(this.handleError))
-  }
-
-  getUserFollows(): Observable<User[]> {
-    return this.http.get<User[]>(
-      this.apiURL + '/user/following',
-      this.httpOptions
-    ).pipe(retry(1), catchError(this.handleError))
-  }
-
-  getUser(): Observable<Repository> {
-    return this.http.get<Repository>(
-      this.apiURL + '/user',
-      this.httpOptions
-    ).pipe(retry(1), catchError(this.handleError))
-  }
-
-  createRepo(name: string): Observable<Repository> {
-    return this.http.post<Repository>(
-      this.apiURL + '/user/repos',
-      {
-        name,
-      },
-      this.httpOptions,
     ).pipe(retry(1), catchError(this.handleError))
   }
 
