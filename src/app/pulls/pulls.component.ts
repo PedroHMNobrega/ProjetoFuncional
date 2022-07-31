@@ -4,11 +4,11 @@ import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
     selector: 'app-home',
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.scss']
+    templateUrl: './pulls.component.html',
+    styleUrls: ['./pulls.component.scss']
 })
 
-export class HomeComponent implements OnInit{
+export class PullsComponent implements OnInit{
     constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient) {}
 
     ngOnInit () {

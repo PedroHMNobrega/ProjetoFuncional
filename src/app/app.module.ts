@@ -11,6 +11,7 @@ import { RepositoriesFiltersComponent } from './repositories-filters/repositorie
 import { HeaderComponent } from './header/header.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { UserInfoComponent } from './user-info/user-info.component';
+import { PullsComponent } from './pulls/pulls.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { UserInfoComponent } from './user-info/user-info.component';
     RepositoriesFiltersComponent,
     HeaderComponent,
     NotFoundComponent,
-    UserInfoComponent
+    UserInfoComponent,
+    PullsComponent
   ],
   imports: [
     BrowserModule,
