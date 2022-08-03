@@ -1,0 +1,14 @@
+<div class="select-repo-container">
+    <h1 class="select-repo-title">Selecione o Repositório</h1>
+    <form class="select-repo-form" #f="ngForm" (submit)="selectRepo(f.value)">
+        <div class="input-container">
+            <span class="input-label">Usuário</span>
+            <input type="text" ngModel name="user"/>
+        </div>
+        <div class="input-container">
+            <span class="input-label">Repositório</span>
+            <input type="text" ngModel name="repo"/>
+        </div>
+        <button>Ver Pull Requests</button>
+    </form>
+</div>
