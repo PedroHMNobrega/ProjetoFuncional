@@ -12,14 +12,18 @@ import { GithubApiService } from '../shared/github-api.service';
 export class PullsComponent implements OnInit{
     pullRequests: PullRequest[];
     filteredPullRequests: PullRequest[];
+    user: string
+    repo: string
 
     constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient, private githubApi: GithubApiService) {
         this.pullRequests = []
         this.filteredPullRequests = []
+        this.user = route.snapshot.params['user'];
+        this.repo = route.snapshot.params['repository'];
     }
 
     ngOnInit () {
-        this.githubApi.getPullRequests().subscribe((data: PullRequest[]) => {
+        this.githubApi.getPullRequests(this.user, this.repo).subscribe((data: PullRequest[]) => {
             this.pullRequests = data
             this.filteredPullRequests = data
         })

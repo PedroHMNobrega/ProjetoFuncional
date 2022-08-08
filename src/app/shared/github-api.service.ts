@@ -11,8 +11,6 @@ export class GithubApiService {
 
   apiURL = 'https://api.github.com'
   token = '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'
-  user = 'NVlabs'
-  repo = 'stylegan'
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -23,9 +21,9 @@ export class GithubApiService {
 
   constructor(private http: HttpClient) { }
 
-  getPullRequests(): Observable<PullRequest[]> {
+  getPullRequests(user: string, repo: string): Observable<PullRequest[]> {
     return this.http.get<PullRequest[]>(
-      this.apiURL + `/repos/${this.user}/${this.repo}/pulls?state=all`,
+      this.apiURL + `/repos/${user}/${repo}/pulls?state=all`,
       this.httpOptions
     ).pipe(retry(1), catchError(this.handleError))
   }
@@ -34,8 +32,10 @@ export class GithubApiService {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
       errorMessage = error.error.message;
+    } else if (error.error.message === 'Bad credentials') {
+      errorMessage = `Token inválido`;
     } else {
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+      errorMessage = `Usuário ou repositório não existe`;
     }
     window.alert(errorMessage);
     return throwError(() => {
