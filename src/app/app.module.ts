@@ -9,13 +9,15 @@ import { AppComponent } from './app.component'
 import { PullsFiltersComponent } from './pulls-filters/pulls-filters.component'
 import { NotFoundComponent } from './not-found/not-found.component';
 import { PullsComponent } from './pulls/pulls.component';
+import { SelectRepoComponent } from './select-repo/select-repo.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NotFoundComponent,
     PullsComponent,
-    PullsFiltersComponent
+    PullsFiltersComponent,
+    SelectRepoComponent
   ],
   imports: [
     BrowserModule,
