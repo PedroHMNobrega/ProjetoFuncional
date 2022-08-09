@@ -10,7 +10,7 @@ import { retry, catchError } from 'rxjs/operators'
 export class GithubApiService {
 
   apiURL = 'https://api.github.com'
-  token = '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'
+  token = ''
 
   httpOptions = {
     headers: new HttpHeaders({

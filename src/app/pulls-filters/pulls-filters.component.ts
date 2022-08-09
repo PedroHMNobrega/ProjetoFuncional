@@ -1,12 +1,12 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 interface Filters {
   search?: string
-  isForked: boolean
-  hasOpenIssues: boolean
-  orderBy?: {attr: string,
-            order: 'asc' | 'desc'}
+  isOpen: boolean
+  isLocked: boolean
+  orderBy?: string
+  selectUser?: string
 }
 
 @Component({
@@ -14,23 +14,31 @@ interface Filters {
   templateUrl: './pulls-filters.component.html',
   styleUrls: ['./pulls-filters.component.scss']
 })
-export class PullsFiltersComponent implements OnInit {
-  @Output() filterChangeEvent = new EventEmitter<Filters>()
-  constructor() { }
+export class PullsFiltersComponent implements OnChanges {
+  @Input()
+  //@ts-ignore
+  users: Record<string, PullRequest[]>;
 
-  ngOnInit(): void {
+  @Output() filterChangeEvent = new EventEmitter<Filters>()
+
+  userNames: string[];
+
+  constructor() {
+    this.userNames = [];
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.userNames = Object.keys(this.users)
   }
 
   onFormChange(f: NgForm) {
-    const { forked, openIssues, orderBy, search } = f.value;
-    console.log('>', orderBy)
+    const { locked, opened, orderBy, search, selectUser } = f.value;
     this.filterChangeEvent.emit({
       search,
-      isForked: forked,
-      hasOpenIssues: openIssues,
-      orderBy: orderBy ? {attr: orderBy.split('-')[0],
-                          order: orderBy.split('-')[1]} : undefined,
+      isOpen: opened,
+      isLocked: locked,
+      orderBy: orderBy,
+      selectUser: selectUser
     })
   }
-
 }
