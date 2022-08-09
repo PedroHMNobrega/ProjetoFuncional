@@ -1,56 +1,64 @@
-<app-pulls-filters [users]="users" (filterChangeEvent)="handleFilters($event)"></app-pulls-filters>
+<div class="container">
+    <h1 class="title">Pull Requests</h1>
+    <div class="pull-description">
+        <h2>Usuário: {{user}}</h2>
+        <h2>Repositório: {{repo}}</h2>
+    </div>
 
-<div class="mt-2 mb-2">
-    <span>Total de pull request: </span>
-    <strong>{{ filteredPullRequests.length }}</strong>
+    <app-pulls-filters [users]="users" (filterChangeEvent)="handleFilters($event)"></app-pulls-filters>
+
+    <div class="mt-2 mb-2">
+        <span>Total de pull request: </span>
+        <strong>{{ filteredPullRequests.length }}</strong>
+    </div>
+
+    <div class="mt-2 mb-2">
+        <span>Usuários distintos: </span>
+        <strong>{{ getDistinctUsers() }}</strong>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Titulo</th>
+            <th scope="col">Descrição</th>
+            <th scope="col">Usuario</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Travado</th>
+            <th scope="col">Criado em</th>
+            <th scope="col">Atualizado em</th>
+            <th scope="col">Fechado em</th>
+            <th scope="col">Mergeado em</th>
+            <th scope="col">Url</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let pr of filteredPullRequests; let i = index">
+            <th scope="row">{{i + 1}}</th>
+            <td>{{pr.title}}</td>
+            <td class="text-truncate" style="max-width: 150px">{{pr.body || '-'}}</td>
+            <td>{{pr.user.login}}</td>
+            <td>
+                <ng-container *ngIf="pr.state == 'open'; then open else closed"></ng-container>
+                <ng-template #open>Aberto</ng-template>
+                <ng-template #closed>Fechado</ng-template>
+            </td>
+            <td>
+                <ng-container *ngIf="pr.locked; then locked else notLocked"></ng-container>
+                <ng-template #locked>Sim</ng-template>
+                <ng-template #notLocked>Não</ng-template>
+            </td>
+            <td>{{pr.created_at || '-'}}</td>
+            <td>{{pr.updated_at || '-'}}</td>
+            <td>{{pr.closed_at || '-'}}</td>
+            <td>{{pr.merged_at || '-'}}</td>
+            <td>
+                <a [href]="pr.html_url">
+                    <i class="bi bi-box-arrow-up-right"></i>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
-
-<div class="mt-2 mb-2">
-    <span>Usuários distintos: </span>
-    <strong>{{ getDistinctUsers() }}</strong>
-</div>
-
-<table class="table">
-    <thead>
-    <tr>
-        <th scope="col">#</th>
-        <th scope="col">Titulo</th>
-        <th scope="col">Descrição</th>
-        <th scope="col">Usuario</th>
-        <th scope="col">Estado</th>
-        <th scope="col">Travado</th>
-        <th scope="col">Criado em</th>
-        <th scope="col">Atualizado em</th>
-        <th scope="col">Fechado em</th>
-        <th scope="col">Mergeado em</th>
-        <th scope="col">Url</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let pr of filteredPullRequests; let i = index">
-        <th scope="row">{{i + 1}}</th>
-        <td>{{pr.title}}</td>
-        <td class="text-truncate" style="max-width: 150px">{{pr.body || '-'}}</td>
-        <td>{{pr.user.login}}</td>
-        <td>
-            <ng-container *ngIf="pr.state == 'open'; then open else closed"></ng-container>
-            <ng-template #open>Aberto</ng-template>
-            <ng-template #closed>Fechado</ng-template>
-        </td>
-        <td>
-            <ng-container *ngIf="pr.locked; then locked else notLocked"></ng-container>
-            <ng-template #locked>Sim</ng-template>
-            <ng-template #notLocked>Não</ng-template>
-        </td>
-        <td>{{pr.created_at || '-'}}</td>
-        <td>{{pr.updated_at || '-'}}</td>
-        <td>{{pr.closed_at || '-'}}</td>
-        <td>{{pr.merged_at || '-'}}</td>
-        <td>
-            <a [href]="pr.html_url">
-                <i class="bi bi-box-arrow-up-right"></i>
-            </a>
-        </td>
-    </tr>
-    </tbody>
-</table>
