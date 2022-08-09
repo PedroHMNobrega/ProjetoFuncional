@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 interface Filters {
@@ -6,6 +6,7 @@ interface Filters {
   isOpen: boolean
   isLocked: boolean
   orderBy?: string
+  selectUser?: string
 }
 
 @Component({
@@ -13,21 +14,31 @@ interface Filters {
   templateUrl: './pulls-filters.component.html',
   styleUrls: ['./pulls-filters.component.scss']
 })
-export class PullsFiltersComponent implements OnInit {
-  @Output() filterChangeEvent = new EventEmitter<Filters>()
-  constructor() { }
+export class PullsFiltersComponent implements OnChanges {
+  @Input()
+  //@ts-ignore
+  users: Record<string, PullRequest[]>;
 
-  ngOnInit(): void {
+  @Output() filterChangeEvent = new EventEmitter<Filters>()
+
+  userNames: string[];
+
+  constructor() {
+    this.userNames = [];
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.userNames = Object.keys(this.users)
   }
 
   onFormChange(f: NgForm) {
-    const { locked, opened, orderBy, search } = f.value;
+    const { locked, opened, orderBy, search, selectUser } = f.value;
     this.filterChangeEvent.emit({
       search,
       isOpen: opened,
       isLocked: locked,
       orderBy: orderBy,
+      selectUser: selectUser
     })
   }
-
 }

@@ -1,13 +1,13 @@
 //@ts-nocheck
 
-export const groupBy = (items, getKeyFn) => items.reduce(
-    (acc, item) => {
-        const key = getKeyFn(item)
+export const groupBy = (items, getAttr) => items.reduce(
+    (prev, current) => {
+        const key = getAttr(current);
         return {
-            ...acc,
+            ...prev,
             [key]: [
-                ...(acc[key] || []),
-                item,
+                ...(prev[key] || []),
+                current,
             ]
         }
     }, {})

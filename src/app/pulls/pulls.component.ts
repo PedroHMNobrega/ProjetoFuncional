@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { ActivatedRoute, Router } from "@angular/router";
 import { GithubApiService } from '../shared/github-api.service';
-import { orderBy as utilsOrderBy, compose, distinct, fold } from '../shared/utils';
+import { orderBy as utilsOrderBy, groupBy, distinct, fold } from '../shared/utils';
 
 @Component({
     selector: 'app-home',
@@ -13,6 +13,7 @@ import { orderBy as utilsOrderBy, compose, distinct, fold } from '../shared/util
 export class PullsComponent implements OnInit{
     pullRequests: PullRequest[];
     filteredPullRequests: PullRequest[];
+    users: Record<string, PullRequest[]>;
     user: string
     repo: string
 
@@ -21,12 +22,14 @@ export class PullsComponent implements OnInit{
         this.filteredPullRequests = []
         this.user = route.snapshot.params['user'];
         this.repo = route.snapshot.params['repository'];
+        this.users = {};
     }
 
     ngOnInit () {
         this.githubApi.getPullRequests(this.user, this.repo).subscribe((data: PullRequest[]) => {
             this.pullRequests = data
             this.filteredPullRequests = data
+            this.users = groupBy(data, (pull: PullRequest) => pull.user.login);
         })
     }
 
@@ -71,6 +74,13 @@ export class PullsComponent implements OnInit{
         return pulls.filter((pull: PullRequest) => pull.title.toLowerCase().includes(text.toLowerCase()));
     }
 
+    selectUser(pulls: PullRequest[], user: string) {
+        if (user == null || user === '') {
+            return pulls
+        }
+        return this.users[user];
+    }
+
     composeFilters(...fns : any[]) {
         return (...args: any[]) => {
             return (prs: PullRequest[]) => {
@@ -82,12 +92,15 @@ export class PullsComponent implements OnInit{
     }
 
     handleFilters(filters: any) {
-        const {isOpen, isLocked, search: searchText, orderBy} = filters
-        const filtered = this.composeFilters(
+        const {isOpen, isLocked, search: searchText, orderBy, selectUser} = filters
+
+        let filtered = this.selectUser(this.pullRequests, selectUser)
+
+        filtered = this.composeFilters(
           this.search,
           this.isOpen,
-          this.isLocked
-        )(searchText, isOpen, isLocked)(this.pullRequests);
+          this.isLocked,
+        )(searchText, isOpen, isLocked)(filtered);
 
         this.filteredPullRequests =
           orderBy ?
