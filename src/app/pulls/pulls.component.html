@@ -2,7 +2,12 @@
 
 <div class="mt-2 mb-2">
     <span>Total de pull request: </span>
-    <strong>{{ pullRequests.length }}</strong>
+    <strong>{{ filteredPullRequests.length }}</strong>
+</div>
+
+<div class="mt-2 mb-2">
+    <span>Usuários distintos: </span>
+    <strong>{{ getDistinctUsers() }}</strong>
 </div>
 
 <table class="table">

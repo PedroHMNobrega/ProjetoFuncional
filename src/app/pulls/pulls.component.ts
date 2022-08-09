@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { ActivatedRoute, Router } from "@angular/router";
 import { GithubApiService } from '../shared/github-api.service';
-import { orderBy as utilsOrderBy } from '../shared/utils';
+import { orderBy as utilsOrderBy, compose, distinct, fold } from '../shared/utils';
 
 @Component({
     selector: 'app-home',
@@ -28,6 +28,17 @@ export class PullsComponent implements OnInit{
             this.pullRequests = data
             this.filteredPullRequests = data
         })
+    }
+
+    getDistinctUsers() {
+        const users = fold((init: User[], element: PullRequest) => {
+            init.push(element.user);
+            return init;
+        }, [], this.filteredPullRequests);
+
+        const distinctUsers = distinct(users, 'login');
+
+        return distinctUsers.length;
     }
 
     isOpen(pulls: PullRequest[], open: boolean | string | null) {
@@ -72,7 +83,6 @@ export class PullsComponent implements OnInit{
 
     handleFilters(filters: any) {
         const {isOpen, isLocked, search: searchText, orderBy} = filters
-        console.log(filters)
         const filtered = this.composeFilters(
           this.search,
           this.isOpen,
