@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { ActivatedRoute, Router } from "@angular/router";
 import { GithubApiService } from '../shared/github-api.service';
-import { orderBy as utilsOrderBy, groupBy, distinct, fold } from '../shared/utils';
+import { orderBy as utilsOrderBy, groupBy, distinct, fold, composeMany } from '../shared/utils';
 
 @Component({
     selector: 'app-home',
@@ -81,22 +81,12 @@ export class PullsComponent implements OnInit{
         return this.users[user];
     }
 
-    composeFilters(...fns : any[]) {
-        return (...args: any[]) => {
-            return (prs: PullRequest[]) => {
-                return fns.reduceRight((currentFilteredRepos, currentFilterFunction, currentIndex) => {
-                    return currentFilterFunction(currentFilteredRepos, args[currentIndex])
-                }, prs)
-            }
-        }
-    }
-
     handleFilters(filters: any) {
         const {isOpen, isLocked, search: searchText, orderBy, selectUser} = filters
 
         let filtered = this.selectUser(this.pullRequests, selectUser)
 
-        filtered = this.composeFilters(
+        filtered = composeMany(
           this.search,
           this.isOpen,
           this.isLocked,

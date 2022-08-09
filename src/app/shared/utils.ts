@@ -33,4 +33,14 @@ export const distinct = (arr, atrib) =>
 export const fold = (reducer, init, array) =>
     array.length === 0 ? init : fold(reducer, reducer(init, array[0]), array.slice (1))
 
-export const compose = (f, g) => x => f( g(x) )
+export const compose = (f, g) => x => f( g(x) );
+
+export const composeMany = (...functions : any[]) => {
+  return (...args: any[]) => {
+    return (arr: any[]) => {
+      return functions.reduceRight((currentArray, currentFunction, currentIndex) => {
+        return currentFunction(currentArray, args[currentIndex])
+      }, arr)
+    }
+  }
+}
