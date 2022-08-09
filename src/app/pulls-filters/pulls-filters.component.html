@@ -8,33 +8,32 @@
     <div class="row g-1 mt-1">
       <div class="h5">Filtros e agregações:</div>
       <div class="col-sm-2">
-        <label class="form-label">Forked?</label>
-        <select class="form-select" ngModel name="forked">
+        <label class="form-label">Aberto?</label>
+        <select class="form-select" ngModel name="opened">
           <option [ngValue]="null" selected>---</option>
           <option [ngValue]="true">Sim</option>
           <option [ngValue]="false">Não</option>
         </select>
       </div>
-  
+
       <div class="col-sm-3">
-        <label class="form-label">Tem issues abertas?</label>
-        <select class="form-select" ngModel name="openIssues">
+        <label class="form-label">Travado?</label>
+        <select class="form-select" ngModel name="locked">
           <option [ngValue]="null" selected>---</option>
           <option [ngValue]="true">Sim</option>
           <option [ngValue]="false">Não</option>
         </select>
       </div>
-  
+
       <div class="col-sm-3">
         <label class="form-label">Ordenar por</label>
         <select class="form-select" ngModel name="orderBy">
           <option value="0" selected>---</option>
-          <option value="name-asc">Ordem alfabética - [A-Z]</option>
-          <option value="name-desc">Ordem alfabética - [Z-A]</option>
-          <option value="open_issues-asc">Nº de issues abertas - [Menor - Maior]</option>
-          <option value="open_issues-desc">Nº de issues abertas - [Maior - Menor]</option>
-          <option value="stargazers_count-asc">Nº de estrelas - [Menor - Maior]</option>
-          <option value="stargazers_count-desc">Nº de estrelas - [Maior - Menor]</option>
+          <option value="title">Ordem alfabética</option>
+          <option value="created_at">Data Criação</option>
+          <option value="closed_at">Data de Fechamento</option>
+          <option value="updated_at">Data de Atualização</option>
+          <option value="merged_at">Data do Merge</option>
         </select>
       </div>
     </div>

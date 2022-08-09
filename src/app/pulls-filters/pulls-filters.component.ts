@@ -3,10 +3,9 @@ import { NgForm } from '@angular/forms';
 
 interface Filters {
   search?: string
-  isForked: boolean
-  hasOpenIssues: boolean
-  orderBy?: {attr: string,
-            order: 'asc' | 'desc'}
+  isOpen: boolean
+  isLocked: boolean
+  orderBy?: string
 }
 
 @Component({
@@ -22,14 +21,12 @@ export class PullsFiltersComponent implements OnInit {
   }
 
   onFormChange(f: NgForm) {
-    const { forked, openIssues, orderBy, search } = f.value;
-    console.log('>', orderBy)
+    const { locked, opened, orderBy, search } = f.value;
     this.filterChangeEvent.emit({
       search,
-      isForked: forked,
-      hasOpenIssues: openIssues,
-      orderBy: orderBy ? {attr: orderBy.split('-')[0],
-                          order: orderBy.split('-')[1]} : undefined,
+      isOpen: opened,
+      isLocked: locked,
+      orderBy: orderBy,
     })
   }
 

@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { ActivatedRoute, Router } from "@angular/router";
 import { GithubApiService } from '../shared/github-api.service';
+import { orderBy as utilsOrderBy } from '../shared/utils';
 
 @Component({
     selector: 'app-home',
@@ -29,37 +30,34 @@ export class PullsComponent implements OnInit{
         })
     }
 
-    forked(repos: Repository[], forked: boolean | string | null) {
-        if (forked == null || forked === '') {
-            return repos
+    isOpen(pulls: PullRequest[], open: boolean | string | null) {
+        if (open == null || open === '') {
+            return pulls
         }
-        return repos.filter((repo: any) => repo.fork == forked)
+        return pulls.filter((pull: PullRequest) => {
+            if(pull.state == "open") {
+                return open;
+            } else {
+                return !open;
+            }
+        })
     }
 
-    hasOpenIssues(repos: Repository[], hasOpenIssues: boolean | string | null) {
-        if (hasOpenIssues == null || hasOpenIssues === '') {
-            return repos
+    isLocked(pulls: PullRequest[], locked: boolean | string | null) {
+        if (locked == null || locked === '') {
+            return pulls
         }
-        return repos.filter((repo: Repository) => (hasOpenIssues && repo.open_issues) || (!hasOpenIssues  && !repo.open_issues))
+        return pulls.filter((pull: PullRequest) => {
+            if(pull.locked) {
+                return locked;
+            } else {
+                return !locked;
+            }
+        })
     }
 
-    compareByAttribute(repoA: Repository, repoB: Repository, attr: keyof Repository, order: 'asc' | 'desc') {
-        if (!attr) {
-            return 0
-        }
-        if (order == 'asc') {
-            //@ts-ignore
-            return repoA[attr]?.toString().toLowerCase() > repoB[attr].toString().toLowerCase() ? 1 : -1
-        }
-        if (order == 'desc') {
-            //@ts-ignore
-            return repoA[attr].toString().toLowerCase() > repoB[attr].toString().toLowerCase() ? -1 : 1
-        }
-        return 0
-    }
-
-    search(repos: Repository[], text: string) {
-        return repos.filter((repo: Repository) => repo.name.toLowerCase().includes(text.toLowerCase()));
+    search(pulls: PullRequest[], text: string) {
+        return pulls.filter((pull: PullRequest) => pull.title.toLowerCase().includes(text.toLowerCase()));
     }
 
     composeFilters(...fns : any[]) {
@@ -73,14 +71,17 @@ export class PullsComponent implements OnInit{
     }
 
     handleFilters(filters: any) {
-        const {isForked, hasOpenIssues, search: searchText, orderBy} = filters
-
+        const {isOpen, isLocked, search: searchText, orderBy} = filters
+        console.log(filters)
         const filtered = this.composeFilters(
           this.search,
-          this.forked,
-          this.hasOpenIssues
-        )(searchText, isForked, hasOpenIssues)(this.pullRequests);
+          this.isOpen,
+          this.isLocked
+        )(searchText, isOpen, isLocked)(this.pullRequests);
 
-        this.filteredPullRequests = orderBy ? filtered.sort((repoA:Repository, repoB:Repository) => this.compareByAttribute(repoA, repoB, orderBy.attr, orderBy.order)) : filtered
+        this.filteredPullRequests =
+          orderBy ?
+          utilsOrderBy(filtered, orderBy)
+          : filtered
     }
 }
